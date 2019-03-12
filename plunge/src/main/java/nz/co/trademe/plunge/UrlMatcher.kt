@@ -1,0 +1,104 @@
+package nz.co.trademe.plunge
+
+import android.net.Uri
+import android.util.Log
+import java.lang.IllegalArgumentException
+
+/**
+ * Interface defining a [UrlMatcher]
+ */
+interface UrlMatcher {
+
+    /**
+     * Function for performing a match against an input URI, returning
+     * the map of matched names
+     */
+    fun performMatch(uri: Uri): Map<String, String>?
+
+    /**
+     * Function invoked when results are returned from performMatch
+     */
+    fun onMatch(results: Map<String, String>)
+}
+
+
+/**
+ * Function for building and returning a [UrlMatcher] function
+ */
+internal fun urlMatcher(pattern: PathPattern, requiredQueryParams: List<String>, acceptedHandler: (results: Map<String, String>) -> Unit): UrlMatcher {
+    // If the pattern given is not valid, throw immediately.
+    if (!pattern.isValid(requiredQueryParams)) {
+        throw IllegalArgumentException(
+                "Invalid pattern: ${pattern.pattern}. Check that capturing groups are closed properly and no groups are named the same as expected query string parameters"
+        )
+    }
+
+    // Construct the [UrlMatcher] and return it
+    return Matcher(pattern, requiredQueryParams, acceptedHandler)
+}
+
+
+/**
+ * A [UrlMatcher] is a function which takes a [Uri] and returns whether or not the URI matches
+ * patterns defined within the function itself. A further parameter of [invokeHandler] has been
+ * included for testing such that the urlMatcher can be run without having to mock the view invocation.
+ */
+internal class Matcher(
+    private val pattern: PathPattern,
+    private val requiredQueryParams: List<String>,
+    private val acceptedHandler: (results: Map<String, String>) -> Unit
+): UrlMatcher {
+
+    override fun performMatch(uri: Uri): Map<String, String>? {
+        val path = uri.path ?: return null
+
+        val patternRegex = pattern.compileToRegex()
+        val allGroups = pattern.extractPathGroups()
+
+        // If the regex isn't a match, return false
+        if (!patternRegex.matches(path)) return null
+
+        // Check to be sure we have our required query params
+        val queryNames = uri.queryParameterNames.map { it.toLowerCase() }
+        val requiredNames = requiredQueryParams.map { it.toLowerCase() }
+
+        if (!queryNames.containsAll(requiredNames)) return null
+
+        // Extract names groups
+        val capturingGroups = allGroups.filterNot { it.name == "_" }
+        val groups = patternRegex.matchEntire(path)
+                ?.groups
+                ?.toList()
+                ?.let { it.subList(1, it.size) }
+                ?: emptyList()
+
+        // If we expect more groups than we found, return false
+        if (capturingGroups.size > groups.size) return null
+
+        // Match up groups to captured groups and hope the ordering is the same
+        @Suppress("UNCHECKED_CAST")
+        val urlPartExtractions = capturingGroups
+                .withIndex()
+                .associateWith { (index, _) -> groups[index] }
+                .map { it.key.value.name to it.value?.value }
+                .toMap()
+                .filter { it.value != null } as Map<String, String>
+
+        // Extract all query parameters into a map, excluding those which are defined as a group name
+        val queryExtractions = uri.queryParameterNames
+                .associateWith { uri.getQueryParameter(it) }
+                .filterNot { entry ->
+                    capturingGroups.any { group -> group.name.toLowerCase() == entry.key?.toLowerCase() }.also { conflictingName ->
+                        if (conflictingName) {
+                            Log.w("UrlMatcher", "Query string of name \"${entry.key}\" conflicts with name of group. Dropping in favour of group name.")
+                        }
+                    }
+                }
+
+        return urlPartExtractions + queryExtractions
+    }
+
+    override fun onMatch(results: Map<String, String>) {
+        acceptedHandler.invoke(results)
+    }
+}

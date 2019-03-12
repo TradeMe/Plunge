@@ -1,0 +1,12 @@
+ext.version = "1.0.0"
+ext.group = "nz.co.trademe.plunge"
+ext.repo = "Plunge"
+ext.org = "trademe"
+ext.scm = 'https://github.com/TradeMe/Plunge.git'
+ext.description = 'Plunge is a small Android library to make handling Deep Links Simple and testable'
+
+ext.compile_sdk = 28
+ext.min_sdk = 15
+ext.kotlin_version = '1.3.21'
+ext.android_maven_version = '3.6.2'
+ext.android_gradle_plugin_version = '3.3.0'

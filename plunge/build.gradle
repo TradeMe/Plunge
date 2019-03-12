@@ -1,25 +1,25 @@
 apply plugin: 'com.android.library'
 
+apply plugin: 'kotlin-android'
+
+apply from: '../common.gradle'
+apply from: '../publishing.gradle'
+
 android {
-    compileSdkVersion 28
+    compileSdkVersion compile_sdk
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        minSdkVersion min_sdk
+        targetSdkVersion compile_sdk
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
+}
 
+ext {
+    name = "Plunge"
 }
 
 dependencies {
