@@ -1,10 +1,16 @@
-# Deeplinking
+# Plunge
 
-The deeplinking module is intended to simplify the matching of URLs to callbacks when a deep link is accepted
+The Plunge library is intended to simplify the matching of URLs to callbacks when a deep link is accepted
 by the application. This module defines a new domain-specific way of matching URLS, and extracting useful
 information required to link the user to the right place.
 
-### Implementation
+## Download
+
+```groovy
+implementation 'nz.co.trademe.plunge:plunge:1.0.0'
+```
+
+## Getting Started
 There's two parts to matching a URL - checking the host matches, and then checking the path matches.
 To define a simple match on a FrEnd path (https://test.nz/marketplace for example), we must define a 
 UrlSchemeHandler. An implementation may be as such:
@@ -39,9 +45,9 @@ fun onDeepLinkCaught(link: Uri) {
 }
 ```
 
-### The Pattern Language
+## The Pattern Language
 
-#### Simple matching
+### Simple matching
 When defining a pattern, you may want to match certain groups of the path and extract the information found within
 to use for routing the user to specific places. An example may be this URL https://www.test.co.nz/1971883591
 Here, all we care about from the apps perspective is the item ID, as that's what we use to launch the Item Details screen. We want to capture the 
@@ -58,7 +64,7 @@ We can use this extracted group in our handler:
 pattern("/{itemId}") { view.launchViewItemScreen(itemId = it["itemId"]) }
 ```
 
-#### Matching with flags
+### Matching with flags
 This pattern may be catching too much however. We know a item ID should only ever be numeric, but our pattern catches any string.
 We can add _flags_ to our pattern to specify which type of characters we should match on. Our above example now becomes this:
 
@@ -75,7 +81,7 @@ Currently we only support the digits flag, but more may be added in future if re
 |------|-------------------|
 |  `d` | Match only digits |
 
-#### Query String matching
+### Query String matching
 By default, query strings are passed to the handler function via the result map. However, there may be cases where we require certain
 query string parameters to be present. An example may be a URL where critical information is conveyed in the query string, such as 
 https://www.test.co.nz/login?token=324829hjrehbf239. Here, the token is used to log the user in, so is essentially a required
@@ -87,12 +93,12 @@ pattern("/login", requiredQueryParams = listOf("token")) { view.logInMember(toke
 
 In this case, the accepted handler will only be invoked if the `token` query string parameter is found.
 
-### Testing
+## Testing
 Due to the strict nature of how matching is done with this new pattern language, all we need to do is ensure
 that an input URL (in the form of a Uri) matches our pattern definition. For this, we can instantiate our handlers
 and test their matchers against an input URI in just a few lines of code:
 
-##### Checking for a positive match
+### Checking for a positive match
 ```kotlin
 val handler = NewSchemeHandler(mock())
 val testUri = Uri.parseUrl("https://test.nz/browse/something")
@@ -101,7 +107,7 @@ val testUri = Uri.parseUrl("https://test.nz/browse/something")
 assertThat(handler.matchers.filterNotNull { it.performMatch(testUri) }.size, 1) 
 
 ```
-##### Checking for a negative match
+### Checking for a negative match
 ```kotlin
 val handler = NewSchemeHandler(mock())
 val testUri = Uri.parseUrl("https://test.nz/browse/shouldntbehandled")
@@ -110,7 +116,7 @@ val testUri = Uri.parseUrl("https://test.nz/browse/shouldntbehandled")
 assertTrue(handler.matchers.none { it.performMatch(testUri) != null })
 ```
 
-##### Checking parameters are extracted properly
+### Checking parameters are extracted properly
 ```kotlin
 val handler = NewSchemeHandler(mock())
 val itemId = "1234343"
@@ -119,5 +125,9 @@ val testUri = Uri.parseUrl("https://test.nz/browse/item/$itemId")
 // Check that the matcher extracts the Item ID correctly
 assertThat(handler.matchers.first { it.performMatch(testUri)}?.get("itemId"), itemId)
 ```
+
+## Contributing
+
+We love contributions, but make sure to checkout `CONTRIBUTING.MD` first!
 
 
