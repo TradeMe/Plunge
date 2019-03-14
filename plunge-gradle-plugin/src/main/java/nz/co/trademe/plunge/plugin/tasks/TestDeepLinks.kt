@@ -57,7 +57,7 @@ open class TestDeepLinks : DefaultTask() {
                     log(it.url)
                 }
 
-                throw GradleException("Some Plunge tests failed, check log for results")
+                fail("Some Plunge tests failed, check log for results")
             }
         }
 

@@ -1,6 +1,6 @@
 package nz.co.trademe.plunge.plugin.tasks
 
-import org.gradle.api.tasks.StopExecutionException
+import org.gradle.api.GradleException
 import java.util.concurrent.TimeUnit
 
 @Throws(CommandFailedException::class)
@@ -18,9 +18,9 @@ suspend fun runCommand(command: String): String {
     }
 }
 
-@Throws(StopExecutionException::class)
+@Throws(GradleException::class)
 fun fail(reason: String): Nothing =
-    throw StopExecutionException("[PLUNGE] $reason")
+    throw GradleException(reason)
 
 fun log(message: String) =
     println("[PLUNGE] $message")
