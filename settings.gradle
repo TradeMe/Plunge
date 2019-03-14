@@ -1,1 +1,4 @@
-include ':sample', ':plunge'
+include ':sample',
+        ':plunge',
+        ':plunge-gradle-plugin',
+        ':plunge-parsing'
