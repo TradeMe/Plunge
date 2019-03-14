@@ -6,11 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 
 import kotlinx.android.synthetic.main.activity_main.*
 import nz.co.trademe.plunge.DeepLinkHandler
-import nz.co.trademe.plunge.UrlSchemeHandler
 
 class MainActivity : AppCompatActivity() {
 
-    private val linkHandler = DeepLinkHandler.withSchemeHandlers(NonCoSchemeHandler(), ClassicSchemeHandler())
+    private val linkHandler = DeepLinkHandler.withSchemeHandlers(
+        NonCoSchemeHandler(::onMatchFound),
+        ClassicSchemeHandler(::onMatchFound)
+    )
 
     private val allPatterns = listOf(
         "test.nz/browse/something",
@@ -45,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onMatchFound(extractions: Map<String, String> = emptyMap()) {
+    private fun onMatchFound(extractions: Map<String, String> = emptyMap()) {
         resultsTextView.text = "Matched! Extracted: $extractions"
     }
 
@@ -53,27 +55,4 @@ class MainActivity : AppCompatActivity() {
         resultsTextView.text = getString(R.string.no_matches_found)
     }
 
-    /**
-     * Example FrEnd Scheme handler
-     */
-    inner class NonCoSchemeHandler : UrlSchemeHandler() {
-        override fun hostMatches(host: String): Boolean = host.contains("test.nz")
-
-        override val matchers by patterns {
-            pattern("/browse/something") { onMatchFound(it) }
-            pattern("/something/{_}/view/{d|id}") { onMatchFound(it) }
-        }
-    }
-
-    /**
-     * Example Classic Scheme handler
-     */
-    inner class ClassicSchemeHandler : UrlSchemeHandler() {
-        override fun hostMatches(host: String): Boolean = host.contains("test.co.nz")
-
-        override val matchers by patterns {
-            pattern("/login", requiredQueryParams = listOf("token")) { onMatchFound(it) }
-            pattern("/{_}/{d|id}-id.htm") { onMatchFound(it) }
-        }
-    }
 }

@@ -1,1 +1,1 @@
-include ':sample', ':plunge'
+include ':sample', ':plunge', ':plunge-test'
