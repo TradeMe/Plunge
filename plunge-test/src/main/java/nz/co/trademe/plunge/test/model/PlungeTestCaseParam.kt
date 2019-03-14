@@ -6,4 +6,6 @@ import kotlinx.serialization.Serializable
 data class PlungeTestCaseParam(
     val name: String,
     val value: String
-)
+) {
+    override fun toString(): String = "\"$name\" -> \"$value\""
+}

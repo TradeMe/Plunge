@@ -1,0 +1,10 @@
+{
+  "url": "https://www.test.co.nz/login?token=a1b2c3d4",
+  "description": "The login page of the co scheme, extracts a token",
+  "params": [
+    {
+      "name": "token",
+      "value": "a1b2c3d4"
+    }
+  ]
+}

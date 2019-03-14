@@ -5,10 +5,13 @@ import nz.co.trademe.plunge.test.model.PlungeTestCase
 import nz.co.trademe.plunge.test.runner.PlungeTestRunner
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
 import org.robolectric.ParameterizedRobolectricTestRunner
+import org.robolectric.annotation.Config
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class DeepLinkTests {
+@Config(manifest= Config.NONE)
+class SamplePlungeTests {
 
     companion object {
 
@@ -28,8 +31,8 @@ class DeepLinkTests {
     fun test() = PlungeTestRunner.assertPlungeTest(
         plungeTestCase,
         DeepLinkHandler.withSchemeHandlers(
-            ClassicSchemeHandler(PlungeTestRunner::captureMatches),
-            NonCoSchemeHandler(PlungeTestRunner::captureMatches)
+            ClassicSchemeHandler(Mockito.mock(MainRouter::class.java)),
+            NonCoSchemeHandler(Mockito.mock(MainRouter::class.java))
         )
     )
 

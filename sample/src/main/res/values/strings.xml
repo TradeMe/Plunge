@@ -2,7 +2,7 @@
     <string name="app_name">Plunge Sample</string>
     <string name="invalid_url">Invalid URL</string>
     <string name="no_matches_found">No matches found</string>
-    <string name="test_url">nz.co.trademe.plunge.sample.Test URL</string>
-    <string name="test_link">nz.co.trademe.plunge.sample.Test link</string>
+    <string name="test_url">nz.co.trademe.plunge.sample.SamplePlungeTests URL</string>
+    <string name="test_link">nz.co.trademe.plunge.sample.SamplePlungeTests link</string>
     <string name="url_patterns">URL Patterns</string>
 </resources>

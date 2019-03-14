@@ -3,15 +3,14 @@ package nz.co.trademe.plunge.sample
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-
 import kotlinx.android.synthetic.main.activity_main.*
 import nz.co.trademe.plunge.DeepLinkHandler
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainRouter {
 
     private val linkHandler = DeepLinkHandler.withSchemeHandlers(
-        NonCoSchemeHandler(::onMatchFound),
-        ClassicSchemeHandler(::onMatchFound)
+        NonCoSchemeHandler(this),
+        ClassicSchemeHandler(this)
     )
 
     private val allPatterns = listOf(
@@ -32,7 +31,7 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-           processUri(uri)
+            processUri(uri)
         }
 
         patternsTextView.text = allPatterns.joinToString("\n")
@@ -47,12 +46,33 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun onMatchFound(extractions: Map<String, String> = emptyMap()) {
-        resultsTextView.text = "Matched! Extracted: $extractions"
-    }
-
     private fun onNoMatchFound() {
         resultsTextView.text = getString(R.string.no_matches_found)
     }
+
+    override fun onBrowseMatch() {
+        resultsTextView.text = "Route to browse page"
+    }
+
+    override fun onViewMatch(id: String?) {
+        resultsTextView.text = "Route to view page"
+    }
+
+    override fun onLoginMatch() {
+        resultsTextView.text = "Route to login page"
+    }
+
+    override fun onIdMatch(id: String?) {
+        resultsTextView.text = "Route to ID page"
+    }
+
+}
+
+interface MainRouter {
+
+    fun onBrowseMatch()
+    fun onViewMatch(id: String?)
+    fun onLoginMatch()
+    fun onIdMatch(id: String?)
 
 }

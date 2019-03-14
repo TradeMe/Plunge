@@ -4,7 +4,7 @@ import android.util.Log
 
 /**
  * Simple data class used for defining a PathPattern. Ideally this would be an inline class, but due
- * to that language features experimental status we'll stick with a data class for now.
+ * to that language feature's experimental status we'll stick with a data class for now.
  */
 internal data class PathPattern(val pattern: String)
 
