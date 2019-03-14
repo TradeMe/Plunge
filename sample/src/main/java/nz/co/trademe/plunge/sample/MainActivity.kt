@@ -51,19 +51,19 @@ class MainActivity : AppCompatActivity(), MainRouter {
     }
 
     override fun onBrowseMatch() {
-        resultsTextView.text = "Route to browse page"
+        resultsTextView.text = getString(R.string.route_to_browse)
     }
 
     override fun onViewMatch(id: String?) {
-        resultsTextView.text = "Route to view page"
+        resultsTextView.text = getString(R.string.route_to_view)
     }
 
     override fun onLoginMatch() {
-        resultsTextView.text = "Route to login page"
+        resultsTextView.text = getString(R.string.route_to_login)
     }
 
     override fun onIdMatch(id: String?) {
-        resultsTextView.text = "Route to ID page"
+        resultsTextView.text = getString(R.string.route_to_id)
     }
 
 }

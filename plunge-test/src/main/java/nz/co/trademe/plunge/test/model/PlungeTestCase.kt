@@ -10,9 +10,5 @@ data class PlungeTestCase(
     @Optional val handled: Boolean = true,
     @Optional val params: List<PlungeTestCaseParam> = emptyList()
 ) {
-
-    override fun toString(): String {
-        return "$description (Handled: $handled)"
-    }
-
+    override fun toString(): String = "$description (Handled: $handled)"
 }
