@@ -3,14 +3,15 @@ package nz.co.trademe.plunge.sample
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-
 import kotlinx.android.synthetic.main.activity_main.*
 import nz.co.trademe.plunge.DeepLinkHandler
-import nz.co.trademe.plunge.UrlSchemeHandler
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainRouter {
 
-    private val linkHandler = DeepLinkHandler.withSchemeHandlers(NonCoSchemeHandler(), ClassicSchemeHandler())
+    private val linkHandler = DeepLinkHandler.withSchemeHandlers(
+        NonCoSchemeHandler(this),
+        ClassicSchemeHandler(this)
+    )
 
     private val allPatterns = listOf(
         "test.nz/browse/something",
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-           processUri(uri)
+            processUri(uri)
         }
 
         patternsTextView.text = allPatterns.joinToString("\n")
@@ -45,35 +46,33 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun onMatchFound(extractions: Map<String, String> = emptyMap()) {
-        resultsTextView.text = "Matched! Extracted: $extractions"
-    }
-
     private fun onNoMatchFound() {
         resultsTextView.text = getString(R.string.no_matches_found)
     }
 
-    /**
-     * Example FrEnd Scheme handler
-     */
-    inner class NonCoSchemeHandler : UrlSchemeHandler() {
-        override fun hostMatches(host: String): Boolean = host.contains("test.nz")
-
-        override val matchers by patterns {
-            pattern("/browse/something") { onMatchFound(it) }
-            pattern("/something/{_}/view/{d|id}") { onMatchFound(it) }
-        }
+    override fun onBrowseMatch() {
+        resultsTextView.text = getString(R.string.route_to_browse)
     }
 
-    /**
-     * Example Classic Scheme handler
-     */
-    inner class ClassicSchemeHandler : UrlSchemeHandler() {
-        override fun hostMatches(host: String): Boolean = host.contains("test.co.nz")
-
-        override val matchers by patterns {
-            pattern("/login", requiredQueryParams = listOf("token")) { onMatchFound(it) }
-            pattern("/{_}/{d|id}-id.htm") { onMatchFound(it) }
-        }
+    override fun onViewMatch(id: String?) {
+        resultsTextView.text = getString(R.string.route_to_view)
     }
+
+    override fun onLoginMatch() {
+        resultsTextView.text = getString(R.string.route_to_login)
+    }
+
+    override fun onIdMatch(id: String?) {
+        resultsTextView.text = getString(R.string.route_to_id)
+    }
+
+}
+
+interface MainRouter {
+
+    fun onBrowseMatch()
+    fun onViewMatch(id: String?)
+    fun onLoginMatch()
+    fun onIdMatch(id: String?)
+
 }

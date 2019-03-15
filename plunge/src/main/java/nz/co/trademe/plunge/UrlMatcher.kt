@@ -2,7 +2,6 @@ package nz.co.trademe.plunge
 
 import android.net.Uri
 import android.util.Log
-import java.lang.IllegalArgumentException
 
 /**
  * Interface defining a [UrlMatcher]
@@ -101,4 +100,7 @@ internal class Matcher(
     override fun onMatch(results: Map<String, String>) {
         acceptedHandler.invoke(results)
     }
+
+    override fun toString(): String = pattern.toString()
+
 }

@@ -5,4 +5,8 @@
     <string name="test_url">Test URL</string>
     <string name="test_link">Test link</string>
     <string name="url_patterns">URL Patterns</string>
+    <string name="route_to_browse">Route to browse page</string>
+    <string name="route_to_view">Route to view page</string>
+    <string name="route_to_login">Route to login page</string>
+    <string name="route_to_id">Route to ID page</string>
 </resources>

@@ -1,13 +1,16 @@
 buildscript {
+    ext.kotlin_version = '1.3.21'
     apply from: 'common.gradle'
 
     repositories {
         google()
         jcenter()
     }
+
     dependencies {
         classpath "com.android.tools.build:gradle:$android_gradle_plugin_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
         classpath "digital.wup:android-maven-publish:$android_maven_version"
     }
 }
@@ -16,6 +19,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url "https://kotlin.bintray.com/kotlinx" }
     }
 }
 

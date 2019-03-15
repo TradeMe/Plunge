@@ -1,0 +1,10 @@
+{
+  "url": "http://test.nz/something/cars/view/12345",
+  "description": "The view page of the non-co scheme, extracts an ID",
+  "params": [
+    {
+      "name": "id",
+      "value": "12345"
+    }
+  ]
+}

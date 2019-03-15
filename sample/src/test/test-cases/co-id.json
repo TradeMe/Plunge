@@ -1,0 +1,10 @@
+{
+  "url": "https://www.test.co.nz/cars/12345-id.htm",
+  "description": "The ID page of the co scheme, extracts an ID",
+  "params": [
+    {
+      "name": "id",
+      "value": "12345"
+    }
+  ]
+}
