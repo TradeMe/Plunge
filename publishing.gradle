@@ -1,24 +1,39 @@
-if (project.plugins.hasPlugin("com.android.library")) {
+if (project.plugins.hasPlugin("com.android.library") || project.plugins.hasPlugin("kotlin")) {
 
-    apply plugin: 'digital.wup.android-maven-publish'
 
-    project.afterEvaluate {
-        task sourcesJar(type: Jar) {
-            from android.sourceSets.main.java.srcDirs
+    if (project.plugins.hasPlugin("com.android.library")) {
+        apply plugin: 'digital.wup.android-maven-publish'
+
+        project.afterEvaluate {
+            task sourcesJar(type: Jar) {
+                from android.sourceSets.main.java.srcDirs
+            }
         }
+    } else {
+        apply plugin: 'maven-publish'
     }
 
     publishing {
         publications {
-            aar(MavenPublication) {
-                from project.components.android
-                artifact project.sourcesJar {
-                    // not required, includes sourcesJar with correct classifier
-                    classifier "sources"
+            if (project.plugins.hasPlugin("kotlin")) {
+                maven(MavenPublication) {
+                    from project.components.java
+
+                    groupId project.ext.group
+                    artifactId project.name
+                    version project.ext.version
                 }
-                groupId project.ext.group
-                artifactId project.name
-                version project.ext.version
+            } else {
+                aar(MavenPublication) {
+                    from project.components.android
+                    artifact project.sourcesJar {
+                        // not required, includes sourcesJar with correct classifier
+                        classifier "sources"
+                    }
+                    groupId project.ext.group
+                    artifactId project.name
+                    version project.ext.version
+                }
             }
         }
 

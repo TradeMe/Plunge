@@ -1,0 +1,30 @@
+apply plugin: 'java-gradle-plugin'
+apply plugin: 'kotlin'
+
+apply from: '../common.gradle'
+apply from: '../publishing.gradle'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+ext {
+    name = "Plunge Gradle Plugin"
+}
+
+repositories {
+    google()
+    jcenter()
+    mavenLocal()
+    maven { url "https://kotlin.bintray.com/kotlinx" }
+}
+
+dependencies {
+    // External dependencies
+    compileOnly gradleApi()
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
+    implementation "com.android.tools.build:gradle:$android_gradle_plugin_version"
+
+    // Plunge parsing
+    implementation "nz.co.trademe.plunge:plunge-parsing:1.0.0"
+}

@@ -4,6 +4,10 @@ The Plunge library is intended to simplify the matching of URLs to callbacks whe
 by the application. This module defines a new domain-specific way of matching URLS, and extracting useful
 information required to link the user to the right place.
 
+Plunge is a library for simplifying the handling of Deep Links in your Android app! It provides a 
+simple method of defining which URLs you want to handle, and which information you want to extract. It then (optionally)
+includes a unified method of testing your deep linking logic, as well as if your app successfully catches URLs from a system level.
+
 ## Download
 
 ```groovy
@@ -12,8 +16,8 @@ implementation 'nz.co.trademe.plunge:plunge:1.0.0'
 
 ## Getting Started
 There's two parts to matching a URL - checking the host matches, and then checking the path matches.
-To define a simple match on a FrEnd path (https://test.nz/marketplace for example), we must define a 
-UrlSchemeHandler. An implementation may be as such:
+To define a simple match on a URL (https://test.nz/marketplace for example), we must define a 
+UrlSchemeHandler. An implementation may look like this:
 
 ```kotlin
 class NewSchemeHandler(private val view: DeepLinkingView): UrlSchemeHandler() {
@@ -27,10 +31,10 @@ class NewSchemeHandler(private val view: DeepLinkingView): UrlSchemeHandler() {
 ```
 
 In this simple example, we've managed to condense the matching on the `/marketplace` path, and invoking
-the view into a single line. The pattern language developed for this feature can do more than just match simple paths
-however.
+the view into a single line. The pattern matching language this library implements can do more than just
+match simple paths however - more on this in [The Pattern Language](#the-pattern-language) section.
 
-To set up and perform matching, all you need to do is construct and instance of `DeepLinkHandler` and call the `processUri` function. An example of this 
+To set up and perform matching, all you need to do is construct an instance of `DeepLinkHandler` and call the `processUri` function. An example of this 
 can be seen below:
 
 ```kotlin
@@ -44,6 +48,8 @@ fun onDeepLinkCaught(link: Uri) {
     }
 }
 ```
+
+If the `DeepLinkHandler` finds a match in any of the Scheme Handlers you've defined, it'll call the associated lambda and return true.
 
 ## The Pattern Language
 
@@ -98,7 +104,9 @@ Due to the strict nature of how matching is done with this new pattern language,
 that an input URL (in the form of a Uri) matches our pattern definition. For this, we can instantiate our handlers
 and test their matchers against an input URI in just a few lines of code:
 
-### Checking for a positive match
+### Manually testing your handlers
+
+#### Checking for a positive match
 ```kotlin
 val handler = NewSchemeHandler(mock())
 val testUri = Uri.parseUrl("https://test.nz/browse/something")
@@ -107,7 +115,7 @@ val testUri = Uri.parseUrl("https://test.nz/browse/something")
 assertThat(handler.matchers.filterNotNull { it.performMatch(testUri) }.size, 1) 
 
 ```
-### Checking for a negative match
+#### Checking for a negative match
 ```kotlin
 val handler = NewSchemeHandler(mock())
 val testUri = Uri.parseUrl("https://test.nz/browse/shouldntbehandled")
@@ -116,7 +124,7 @@ val testUri = Uri.parseUrl("https://test.nz/browse/shouldntbehandled")
 assertTrue(handler.matchers.none { it.performMatch(testUri) != null })
 ```
 
-### Checking parameters are extracted properly
+#### Checking parameters are extracted properly
 ```kotlin
 val handler = NewSchemeHandler(mock())
 val itemId = "1234343"
@@ -125,6 +133,9 @@ val testUri = Uri.parseUrl("https://test.nz/browse/item/$itemId")
 // Check that the matcher extracts the Item ID correctly
 assertThat(handler.matchers.first { it.performMatch(testUri)}?.get("itemId"), itemId)
 ```
+
+### Test your handling automatically
+// TODO - Documentation around Handle Me etc.
 
 ## Contributing
 

@@ -1,4 +1,4 @@
-package nz.co.trademe.plunge.test.model
+package nz.co.trademe.plunge.parsing.models
 
 import kotlinx.serialization.Serializable
 
@@ -6,6 +6,4 @@ import kotlinx.serialization.Serializable
 data class PlungeTestCaseParam(
     val name: String,
     val value: String
-) {
-    override fun toString(): String = "\"$name\" -> \"$value\""
-}
+)

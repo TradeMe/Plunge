@@ -1,8 +1,8 @@
 package nz.co.trademe.plunge.sample
 
 import nz.co.trademe.plunge.DeepLinkHandler
-import nz.co.trademe.plunge.test.model.PlungeTestCase
-import nz.co.trademe.plunge.test.runner.PlungeTestRunner
+import nz.co.trademe.plunge.parsing.models.PlungeTestCase
+import nz.co.trademe.plunge.test.PlungeTestRunner
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito

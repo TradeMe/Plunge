@@ -22,7 +22,6 @@ android {
 
 repositories {
     mavenCentral()
-    maven { url "https://kotlin.bintray.com/kotlinx" }
 }
 
 dependencies {
@@ -31,8 +30,7 @@ dependencies {
     implementation 'junit:junit:4.12'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation project(':plunge')
-
-    api 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.10.0'
+    implementation project(':plunge-parsing')
 
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

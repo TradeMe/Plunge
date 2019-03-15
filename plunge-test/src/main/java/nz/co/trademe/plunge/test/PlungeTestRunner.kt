@@ -1,9 +1,9 @@
-package nz.co.trademe.plunge.test.runner
+package nz.co.trademe.plunge.test
 
 import android.net.Uri
-import kotlinx.serialization.json.Json
 import nz.co.trademe.plunge.DeepLinkHandler
-import nz.co.trademe.plunge.test.model.PlungeTestCase
+import nz.co.trademe.plunge.parsing.PlungeParser
+import nz.co.trademe.plunge.parsing.models.PlungeTestCase
 import org.junit.Assert.*
 import java.io.File
 
@@ -11,11 +11,7 @@ object PlungeTestRunner {
 
     @JvmStatic
     fun testCases(pathToTests: String): Collection<Array<PlungeTestCase>> =
-        File(pathToTests).listFiles { f ->
-            f.extension == "json"
-        }.map {
-            arrayOf(Json.parse(PlungeTestCase.serializer(), it.readText()))
-        }
+        PlungeParser.readTestCases(File(pathToTests)).map { arrayOf(it) }
 
     @JvmStatic
     fun assertPlungeTest(
