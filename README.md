@@ -11,7 +11,7 @@ includes a unified method of testing your deep linking logic, as well as if your
 ## Download
 
 ```groovy
-implementation 'nz.co.trademe.plunge:plunge:1.0.0'
+implementation 'nz.co.trademe.plunge:plunge:current_version'
 ```
 
 ## Getting Started
@@ -104,6 +104,55 @@ Due to the strict nature of how matching is done with this new pattern language,
 that an input URL (in the form of a Uri) matches our pattern definition. For this, we can instantiate our handlers
 and test their matchers against an input URI in just a few lines of code:
 
+### Using Plunge to test deep link handling
+Plunge includes two optional, though recommended, dependencies for helping you test your apps deep link handling. These modules allow you to not only test your `pattern` implementation, but also check to make sure your app actually handles the correct URLs from an `intent-filter` level.
+
+#### Defining test cases
+Test cases for Plunge are defined in JSON for ease of parsing and human readibility. It also allows Plunge to access these test cases in a unified way. A sample test case may look like this:
+```json
+{
+  "url": "https://www.test.co.nz/login?token=a1b2c3d4",
+  "description": "The login page of the co scheme, extracts a token",
+  "params": [
+    {
+      "name": "token",
+      "value": "a1b2c3d4"
+    }
+  ]
+}
+```
+
+Here we define the URL to test, with a human readible description. We also define params, which is what we expect our `pattern`s to match on and extract.
+
+These test cases should be added to a new directory in the `test` source directory in your app module, and example might be `src/test/test-cases`. See the sample for an example setup!
+
+#### Using `plunge-test` for testing patterns
+You'll first need to add a dependency on our test module to you app's test configuration.
+```groovy
+testImplementation 'nz.co.trademe.plunge:plunge-test:current_version'
+```
+
+// TODO - @hndmrsh to fill this out
+
+#### Use `plunge-gradle-plugin` for testing your `intent-filter`'s
+You'll first need to add the plugin as a dependency in your build script:
+```groovy
+classpath 'nz.co.trademe.plunge:plunge-gradle-plugin:current_version'
+```
+Next, apply the plugin and provide a path to your test cases.
+```
+apply plugin: nz.co.trademe.plunge
+
+plunge {
+    testDirectory = file("$projectDir/src/test/test-cases")
+}
+```
+After a Gradle Sync you notice a few new tasks pop up in the `verification` section for your app, starting with `plungeTest`. Running these tasks will build and deploy that variant of your app to the device attached, and then run the test cases against that installation of the app to ensure the app handles the URLs you want it to. Note, this also supports _negative_ tests, where you can specify which URLs you don't want your app to handle!
+
+There are a couple of subtleties to be aware of:
+* The release variant of the `plungeTest` task may not build and deploy your application first. If this is the case, simply ensure your have the release variant installed.
+* For the verification to work, you must ensure only one device is connected in debug mode before running the test. This is due to the fact that it queries a specific device for URLs handled. 
+
 ### Manually testing your handlers
 
 #### Checking for a positive match
@@ -133,9 +182,8 @@ val testUri = Uri.parseUrl("https://test.nz/browse/item/$itemId")
 // Check that the matcher extracts the Item ID correctly
 assertThat(handler.matchers.first { it.performMatch(testUri)}?.get("itemId"), itemId)
 ```
-
-### Test your handling automatically
-// TODO - Documentation around Handle Me etc.
+## License
+Plunge is licensed as MIT.
 
 ## Contributing
 
