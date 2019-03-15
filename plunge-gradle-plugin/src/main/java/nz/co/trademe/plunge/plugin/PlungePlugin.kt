@@ -43,6 +43,9 @@ class PlungePlugin: Plugin<Project> {
                 it.packageName = variant.applicationId
                 it.testCaseDirectory.set(plungeExtensions.getTestDirectory())
 
+                it.group = "verification"
+                it.description = "Run Plunge test cases against the ${variant.name} application variant"
+
                 // Depend on the install task if it exists
                 tasks.find { task -> task.name == "install${variant.name.capitalize()}" }?.let { installTask ->
                     it.dependsOn.add(installTask.name)

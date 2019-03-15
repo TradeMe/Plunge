@@ -34,7 +34,7 @@
                 <data android:host="test.nz"/>
 
                 <data android:path="/browse/something"/>
-                <data android:path="/something/.*/view/.*"/>
+                <data android:pathPattern="/something/.*/view/.*"/>
             </intent-filter>
 
             <!-- www.test.co.nz-->
