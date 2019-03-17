@@ -119,7 +119,7 @@ class UrlMatcherTest {
         val matcher = urlMatcher(PathPattern("/complete/{param}"), emptyList()) { throw Exception(it["param"]) }
         val input = Uri.parse("https://www.test.com/complete/1234")
 
-        fun run() { matcher.onMatch(matcher.performMatch(input)!!) }
+        fun run() { matcher.onMatch(input, matcher.performMatch(input)!!) }
 
         ::run `should throw` Exception::class `with message` "1234"
     }

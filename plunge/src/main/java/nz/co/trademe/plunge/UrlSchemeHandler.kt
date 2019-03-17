@@ -38,7 +38,7 @@ abstract class UrlSchemeHandler {
          * invoked with a map containing the values of keys defined in the [urlPattern], as well as
          * the key-value pairs of query string parameters.
          */
-        fun pattern(urlPattern: String, requiredQueryParams: List<String> = emptyList(), acceptedPatternHandler: (result: Map<String, String>) -> Unit) =
+        fun pattern(urlPattern: String, requiredQueryParams: List<String> = emptyList(), acceptedPatternHandler: UrlMatchResult.(result: Map<String, String>) -> Unit) =
                 urlMatcher(PathPattern(urlPattern), requiredQueryParams, acceptedPatternHandler).also { matchers.add(it) }
     }
 }

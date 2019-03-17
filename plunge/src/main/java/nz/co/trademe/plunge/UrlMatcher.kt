@@ -17,14 +17,14 @@ interface UrlMatcher {
     /**
      * Function invoked when results are returned from performMatch
      */
-    fun onMatch(results: Map<String, String>)
+    fun onMatch(referringUri: Uri, results: Map<String, String>)
 }
 
 
 /**
  * Function for building and returning a [UrlMatcher] function
  */
-internal fun urlMatcher(pattern: PathPattern, requiredQueryParams: List<String>, acceptedHandler: (results: Map<String, String>) -> Unit): UrlMatcher {
+internal fun urlMatcher(pattern: PathPattern, requiredQueryParams: List<String>, acceptedHandler: UrlMatchResult.(results: Map<String, String>) -> Unit): UrlMatcher {
     // If the pattern given is not valid, throw immediately.
     if (!pattern.isValid(requiredQueryParams)) {
         throw IllegalArgumentException(
@@ -45,7 +45,7 @@ internal fun urlMatcher(pattern: PathPattern, requiredQueryParams: List<String>,
 internal class Matcher(
     private val pattern: PathPattern,
     private val requiredQueryParams: List<String>,
-    private val acceptedHandler: (results: Map<String, String>) -> Unit
+    private val acceptedHandler: UrlMatchResult.(results: Map<String, String>) -> Unit
 ): UrlMatcher {
 
     override fun performMatch(uri: Uri): Map<String, String>? {
@@ -97,8 +97,8 @@ internal class Matcher(
         return urlPartExtractions + queryExtractions
     }
 
-    override fun onMatch(results: Map<String, String>) {
-        acceptedHandler.invoke(results)
+    override fun onMatch(referringUri: Uri, results: Map<String, String>) {
+        UrlMatchResult(referringUri).acceptedHandler(results)
     }
 
     override fun toString(): String = pattern.toString()
