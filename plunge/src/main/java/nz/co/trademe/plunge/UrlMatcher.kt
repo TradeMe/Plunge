@@ -24,7 +24,7 @@ interface UrlMatcher {
 /**
  * Function for building and returning a [UrlMatcher] function
  */
-internal fun urlMatcher(pattern: PathPattern, requiredQueryParams: List<String>, acceptedHandler: UrlMatchResult.(results: Map<String, String>) -> Unit): UrlMatcher {
+internal fun urlMatcher(pattern: PathPattern, requiredQueryParams: List<String>, acceptedHandler: (UrlMatchResult) -> Unit): UrlMatcher {
     // If the pattern given is not valid, throw immediately.
     if (!pattern.isValid(requiredQueryParams)) {
         throw IllegalArgumentException(
@@ -45,7 +45,7 @@ internal fun urlMatcher(pattern: PathPattern, requiredQueryParams: List<String>,
 internal class Matcher(
     private val pattern: PathPattern,
     private val requiredQueryParams: List<String>,
-    private val acceptedHandler: UrlMatchResult.(results: Map<String, String>) -> Unit
+    private val acceptedHandler: (UrlMatchResult) -> Unit
 ): UrlMatcher {
 
     override fun performMatch(uri: Uri): UrlMatchResult? {
@@ -94,11 +94,11 @@ internal class Matcher(
                     }
                 }
 
-        return UrlMatchResult(referringUri = uri, params = urlPartExtractions + queryExtractions)
+        return UrlMatchResult(url = uri, params = urlPartExtractions + queryExtractions)
     }
 
     override fun onMatch(matchResult: UrlMatchResult) {
-        matchResult.acceptedHandler(matchResult.params)
+        acceptedHandler(matchResult)
     }
 
     override fun toString(): String = pattern.toString()

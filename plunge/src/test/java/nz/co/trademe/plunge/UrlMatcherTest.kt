@@ -116,7 +116,7 @@ class UrlMatcherTest {
 
     @Test
     fun `urlMatcher should call handler on match`() {
-        val matcher = urlMatcher(PathPattern("/complete/{param}"), emptyList()) { throw Exception(it["param"]) }
+        val matcher = urlMatcher(PathPattern("/complete/{param}"), emptyList()) { throw Exception(it.params["param"]) }
         val input = Uri.parse("https://www.test.com/complete/1234")
 
         fun run() { matcher.onMatch(matcher.performMatch(input)!!) }

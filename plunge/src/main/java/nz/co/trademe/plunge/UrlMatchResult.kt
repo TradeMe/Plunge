@@ -6,6 +6,6 @@ import android.net.Uri
  * Class used for extending the results provided to the match handling functions
  */
 data class UrlMatchResult(
-    val referringUri: Uri,
+    val url: Uri,
     val params: Map<String, String>
 )
