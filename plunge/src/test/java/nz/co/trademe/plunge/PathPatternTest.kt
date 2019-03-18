@@ -60,6 +60,12 @@ class PathPatternTest {
         testPattern.isValid(emptyList()) `should be equal to` true
     }
 
+    @Test
+    fun `isValid accepts complete groups - multiple non-capturing groups are valid`() {
+        val testPattern = PathPattern("/{_}/{_}/something-{group1}.html")
+        testPattern.isValid(emptyList()) `should be equal to` true
+    }
+
     // ENDREGION
 
     // REGION extractPathGroups

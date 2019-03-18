@@ -36,8 +36,11 @@ internal fun PathPattern.isValid(requiredQueryParameters: List<String>): Boolean
             .map { it.name }
             .toList()
 
-    if (allGroups.toSet().size < allGroups.size) {
-        Log.e("PatternValidator", "Duplicate keys found in pattern $pattern: $allGroups")
+    // Filter non-capturing groups as they're fine to be duplicated
+    val filteredGroups = allGroups.filterNot { it == "_" }
+
+    if (filteredGroups.toSet().size < filteredGroups.size) {
+        Log.e("PatternValidator", "Duplicate keys found in pattern $pattern: $filteredGroups")
         return false
     }
 
