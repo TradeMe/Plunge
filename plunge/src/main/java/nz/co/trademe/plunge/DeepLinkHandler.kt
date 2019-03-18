@@ -31,7 +31,7 @@ class DeepLinkHandler private constructor(
                 val result = it.performMatch(uri)
 
                 if (result != null) {
-                    it.onMatch(uri, result)
+                    it.onMatch(result)
                     return true
                 }
             }

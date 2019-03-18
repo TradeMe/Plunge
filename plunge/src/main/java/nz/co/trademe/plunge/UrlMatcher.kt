@@ -12,12 +12,12 @@ interface UrlMatcher {
      * Function for performing a match against an input URI, returning
      * the map of matched names
      */
-    fun performMatch(uri: Uri): Map<String, String>?
+    fun performMatch(uri: Uri): UrlMatchResult?
 
     /**
      * Function invoked when results are returned from performMatch
      */
-    fun onMatch(referringUri: Uri, results: Map<String, String>)
+    fun onMatch(matchResult: UrlMatchResult)
 }
 
 
@@ -48,7 +48,7 @@ internal class Matcher(
     private val acceptedHandler: UrlMatchResult.(results: Map<String, String>) -> Unit
 ): UrlMatcher {
 
-    override fun performMatch(uri: Uri): Map<String, String>? {
+    override fun performMatch(uri: Uri): UrlMatchResult? {
         val path = uri.path ?: return null
 
         val patternRegex = pattern.compileToRegex()
@@ -94,11 +94,11 @@ internal class Matcher(
                     }
                 }
 
-        return urlPartExtractions + queryExtractions
+        return UrlMatchResult(referringUri = uri, params = urlPartExtractions + queryExtractions)
     }
 
-    override fun onMatch(referringUri: Uri, results: Map<String, String>) {
-        UrlMatchResult(referringUri).acceptedHandler(results)
+    override fun onMatch(matchResult: UrlMatchResult) {
+        matchResult.acceptedHandler(matchResult.params)
     }
 
     override fun toString(): String = pattern.toString()
