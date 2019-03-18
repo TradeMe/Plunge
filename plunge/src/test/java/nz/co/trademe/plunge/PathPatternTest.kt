@@ -117,6 +117,12 @@ class PathPatternTest {
     }
 
     @Test
+    fun `compileToRegex compiles standard group correctly - including multiple non-capturing groups`() {
+        val testPattern = PathPattern("/{_}/{_}/{group}")
+        testPattern.compileToRegex().pattern `should be equal to` "/(?:\\w+)/(?:\\w+)/(\\w+)"
+    }
+
+    @Test
     fun `compileToRegex compiles standard group correctly - including flagged non-capturing groups`() {
         val testPattern = PathPattern("/complete/{d|_}/{group}")
         testPattern.compileToRegex().pattern `should be equal to` "/complete/(?:\\d+)/(\\w+)"
