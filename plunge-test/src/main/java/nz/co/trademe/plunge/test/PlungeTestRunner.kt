@@ -40,7 +40,7 @@ object PlungeTestRunner {
         val matcher = schemeHandler!!.matchers.first { it.performMatch(uri) != null }
         System.out.println("Matcher: ${matcher}")
 
-        val params = matcher.performMatch(uri) ?: emptyMap()
+        val params = matcher.performMatch(uri)?.params ?: emptyMap()
 
         assertEquals(
             "Wrong parameters extracted",

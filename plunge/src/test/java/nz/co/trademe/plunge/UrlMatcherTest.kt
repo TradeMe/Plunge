@@ -35,7 +35,7 @@ class UrlMatcherTest {
         val matcher = urlMatcher(PathPattern("/complete/{group}"), emptyList()) {}
         val input = Uri.parse("https://www.test.com/complete/test")
 
-        matcher.performMatch(input).orEmpty() `should contain` ("group" to "test")
+        matcher.performMatch(input)?.params.orEmpty() `should contain` ("group" to "test")
     }
 
     @Test
@@ -43,7 +43,7 @@ class UrlMatcherTest {
         val matcher = urlMatcher(PathPattern("/complete/{d|group}"), emptyList()) {}
         val input = Uri.parse("https://www.test.com/complete/1234")
 
-        matcher.performMatch(input).orEmpty() `should contain` ("group" to "1234")
+        matcher.performMatch(input)?.params.orEmpty() `should contain` ("group" to "1234")
     }
 
     @Test
@@ -51,7 +51,7 @@ class UrlMatcherTest {
         val matcher = urlMatcher(PathPattern("/complete/{_}/listing"), emptyList()) {}
         val input = Uri.parse("https://www.test.com/complete/anything/listing")
 
-        matcher.performMatch(input).orEmpty() `should equal` emptyMap()
+        matcher.performMatch(input)?.params.orEmpty() `should equal` emptyMap()
     }
 
     @Test
@@ -59,7 +59,7 @@ class UrlMatcherTest {
         val matcher = urlMatcher(PathPattern("/complete/{d|group}"), emptyList()) {}
         val input = Uri.parse("https://www.test.com/complete/12fd34")
 
-        matcher.performMatch(input).orEmpty() `should equal` emptyMap()
+        matcher.performMatch(input)?.params.orEmpty() `should equal` emptyMap()
     }
 
     @Test
@@ -67,7 +67,7 @@ class UrlMatcherTest {
         val matcher = urlMatcher(PathPattern("/complete/{group1}/{group2}"), emptyList()) {}
         val input = Uri.parse("https://www.test.com/complete/1234/test")
 
-        matcher.performMatch(input).orEmpty() `should contain all` mapOf("group1" to "1234", "group2" to "test")
+        matcher.performMatch(input)?.params.orEmpty() `should contain all` mapOf("group1" to "1234", "group2" to "test")
     }
 
     @Test
@@ -75,7 +75,7 @@ class UrlMatcherTest {
         val matcher = urlMatcher(PathPattern("/complete/{d|group1}/{group2}"), emptyList()) {}
         val input = Uri.parse("https://www.test.com/complete/1234/test")
 
-        matcher.performMatch(input).orEmpty() `should contain all` mapOf("group1" to "1234", "group2" to "test")
+        matcher.performMatch(input)?.params.orEmpty() `should contain all` mapOf("group1" to "1234", "group2" to "test")
     }
 
     @Test
@@ -83,7 +83,7 @@ class UrlMatcherTest {
         val matcher = urlMatcher(PathPattern("/complete/{group1}-{group2}.htm"), emptyList()) {}
         val input = Uri.parse("https://www.test.com/complete/1234-test.htm")
 
-        matcher.performMatch(input).orEmpty() `should contain all` mapOf("group1" to "1234", "group2" to "test")
+        matcher.performMatch(input)?.params.orEmpty() `should contain all` mapOf("group1" to "1234", "group2" to "test")
     }
 
     @Test
@@ -91,7 +91,7 @@ class UrlMatcherTest {
         val matcher = urlMatcher(PathPattern("/complete/{d|group1}-{group2}.htm"), emptyList()) {}
         val input = Uri.parse("https://www.test.com/complete/1234-test.htm")
 
-        matcher.performMatch(input).orEmpty() `should contain all` mapOf("group1" to "1234", "group2" to "test")
+        matcher.performMatch(input)?.params.orEmpty() `should contain all` mapOf("group1" to "1234", "group2" to "test")
     }
 
     @Test
@@ -99,7 +99,7 @@ class UrlMatcherTest {
         val matcher = urlMatcher(PathPattern("/complete"), emptyList()) {}
         val input = Uri.parse("https://www.test.com/complete?param=test")
 
-        matcher.performMatch(input).orEmpty() `should contain` ("param" to "test")
+        matcher.performMatch(input)?.params.orEmpty() `should contain` ("param" to "test")
     }
 
     @Test
@@ -107,7 +107,7 @@ class UrlMatcherTest {
         val matcher = urlMatcher(PathPattern("/complete/{param}"), emptyList()) {}
         val input = Uri.parse("https://www.test.com/complete/1234?param=test")
 
-        matcher.performMatch(input).orEmpty() `should contain` ("param" to "1234")
+        matcher.performMatch(input)?.params.orEmpty() `should contain` ("param" to "1234")
     }
 
     // ENDREGION
@@ -116,7 +116,7 @@ class UrlMatcherTest {
 
     @Test
     fun `urlMatcher should call handler on match`() {
-        val matcher = urlMatcher(PathPattern("/complete/{param}"), emptyList()) { throw Exception(it["param"]) }
+        val matcher = urlMatcher(PathPattern("/complete/{param}"), emptyList()) { throw Exception(it.params["param"]) }
         val input = Uri.parse("https://www.test.com/complete/1234")
 
         fun run() { matcher.onMatch(matcher.performMatch(input)!!) }

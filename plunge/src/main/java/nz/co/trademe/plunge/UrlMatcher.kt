@@ -12,19 +12,19 @@ interface UrlMatcher {
      * Function for performing a match against an input URI, returning
      * the map of matched names
      */
-    fun performMatch(uri: Uri): Map<String, String>?
+    fun performMatch(uri: Uri): UrlMatchResult?
 
     /**
      * Function invoked when results are returned from performMatch
      */
-    fun onMatch(results: Map<String, String>)
+    fun onMatch(matchResult: UrlMatchResult)
 }
 
 
 /**
  * Function for building and returning a [UrlMatcher] function
  */
-internal fun urlMatcher(pattern: PathPattern, requiredQueryParams: List<String>, acceptedHandler: (results: Map<String, String>) -> Unit): UrlMatcher {
+internal fun urlMatcher(pattern: PathPattern, requiredQueryParams: List<String>, acceptedHandler: (UrlMatchResult) -> Unit): UrlMatcher {
     // If the pattern given is not valid, throw immediately.
     if (!pattern.isValid(requiredQueryParams)) {
         throw IllegalArgumentException(
@@ -45,10 +45,10 @@ internal fun urlMatcher(pattern: PathPattern, requiredQueryParams: List<String>,
 internal class Matcher(
     private val pattern: PathPattern,
     private val requiredQueryParams: List<String>,
-    private val acceptedHandler: (results: Map<String, String>) -> Unit
+    private val acceptedHandler: (UrlMatchResult) -> Unit
 ): UrlMatcher {
 
-    override fun performMatch(uri: Uri): Map<String, String>? {
+    override fun performMatch(uri: Uri): UrlMatchResult? {
         val path = uri.path ?: return null
 
         val patternRegex = pattern.compileToRegex()
@@ -94,11 +94,11 @@ internal class Matcher(
                     }
                 }
 
-        return urlPartExtractions + queryExtractions
+        return UrlMatchResult(url = uri, params = urlPartExtractions + queryExtractions)
     }
 
-    override fun onMatch(results: Map<String, String>) {
-        acceptedHandler.invoke(results)
+    override fun onMatch(matchResult: UrlMatchResult) {
+        acceptedHandler(matchResult)
     }
 
     override fun toString(): String = pattern.toString()
