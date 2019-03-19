@@ -101,37 +101,43 @@ class PathPatternTest {
     @Test
     fun `compileToRegex compiles standard group correctly`() {
         val testPattern = PathPattern("/complete/{group}")
-        testPattern.compileToRegex().pattern `should be equal to` "/complete/([^/]+)"
+        testPattern.compileToRegex().pattern `should be equal to` "/complete/([^/]+)(?:/)?"
     }
 
     @Test
     fun `compileToRegex compiles flagged group correctly`() {
         val testPattern = PathPattern("/complete/{d|group}")
-        testPattern.compileToRegex().pattern `should be equal to` "/complete/(\\d+)"
+        testPattern.compileToRegex().pattern `should be equal to` "/complete/(\\d+)(?:/)?"
     }
 
     @Test
     fun `compileToRegex compiles standard group correctly - including non-capturing groups`() {
         val testPattern = PathPattern("/complete/{_}/{group}")
-        testPattern.compileToRegex().pattern `should be equal to` "/complete/(?:[^/]+)/([^/]+)"
+        testPattern.compileToRegex().pattern `should be equal to` "/complete/(?:[^/]+)/([^/]+)(?:/)?"
     }
 
     @Test
     fun `compileToRegex compiles standard group correctly - including multiple non-capturing groups`() {
         val testPattern = PathPattern("/{_}/{_}/{group}")
-        testPattern.compileToRegex().pattern `should be equal to` "/(?:[^/]+)/(?:[^/]+)/([^/]+)"
+        testPattern.compileToRegex().pattern `should be equal to` "/(?:[^/]+)/(?:[^/]+)/([^/]+)(?:/)?"
     }
 
     @Test
     fun `compileToRegex compiles standard group correctly - including flagged non-capturing groups`() {
         val testPattern = PathPattern("/complete/{d|_}/{group}")
-        testPattern.compileToRegex().pattern `should be equal to` "/complete/(?:\\d+)/([^/]+)"
+        testPattern.compileToRegex().pattern `should be equal to` "/complete/(?:\\d+)/([^/]+)(?:/)?"
     }
 
     @Test
     fun `compileToRegex compiles standard group correctly in middle of path`() {
         val testPattern = PathPattern("/complete/listing-{group}")
-        testPattern.compileToRegex().pattern `should be equal to` "/complete/listing-([^/]+)"
+        testPattern.compileToRegex().pattern `should be equal to` "/complete/listing-([^/]+)(?:/)?"
+    }
+
+    @Test
+    fun `compileToRegex generates optional trailing slash`() {
+        val testPattern = PathPattern("/complete/listing-{group}")
+        testPattern.compileToRegex().pattern `should be equal to` "/complete/listing-([^/]+)(?:/)?"
     }
 
     // ENDREGION

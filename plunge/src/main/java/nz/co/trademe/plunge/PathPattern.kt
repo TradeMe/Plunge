@@ -133,6 +133,9 @@ internal fun PathPattern.compileToRegex(): Regex {
         }
     }
 
+    // Add an optional, non-capturing trailing slash
+    regexString += "(?:/)?"
+
     return regexString.toRegex(RegexOption.IGNORE_CASE)
 }
 
