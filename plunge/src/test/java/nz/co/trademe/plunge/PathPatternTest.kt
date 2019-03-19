@@ -135,9 +135,9 @@ class PathPatternTest {
     }
 
     @Test
-    fun `compileToRegex generates optional trailing slash`() {
-        val testPattern = PathPattern("/complete/listing-{group}")
-        testPattern.compileToRegex().pattern `should be equal to` "/complete/listing-([^/]+)(?:/)?"
+    fun `compileToRegex doesn't generate optional trailing slash if pattern specifies`() {
+        val testPattern = PathPattern("/complete/listing-{group}/")
+        testPattern.compileToRegex().pattern `should be equal to` "/complete/listing-([^/]+)/"
     }
 
     // ENDREGION

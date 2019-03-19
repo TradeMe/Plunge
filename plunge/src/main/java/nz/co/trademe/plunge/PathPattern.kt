@@ -133,8 +133,10 @@ internal fun PathPattern.compileToRegex(): Regex {
         }
     }
 
-    // Add an optional, non-capturing trailing slash
-    regexString += "(?:/)?"
+    // Add an optional, non-capturing trailing slash if the last character isn't a non-optional trailing slash
+    if (regexString.last() != '/') {
+        regexString += "(?:/)?"
+    }
 
     return regexString.toRegex(RegexOption.IGNORE_CASE)
 }
