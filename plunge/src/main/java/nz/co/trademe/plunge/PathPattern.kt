@@ -36,8 +36,11 @@ internal fun PathPattern.isValid(requiredQueryParameters: List<String>): Boolean
             .map { it.name }
             .toList()
 
-    if (allGroups.toSet().size < allGroups.size) {
-        Log.e("PatternValidator", "Duplicate keys found in pattern $pattern: $allGroups")
+    // Filter non-capturing groups as they're fine to be duplicated
+    val filteredGroups = allGroups.filterNot { it == "_" }
+
+    if (filteredGroups.toSet().size < filteredGroups.size) {
+        Log.e("PatternValidator", "Duplicate keys found in pattern $pattern: $filteredGroups")
         return false
     }
 
@@ -130,7 +133,7 @@ internal fun PathPattern.compileToRegex(): Regex {
         }
     }
 
-    return regexString.toRegex()
+    return regexString.toRegex(RegexOption.IGNORE_CASE)
 }
 
 /**
@@ -145,7 +148,7 @@ private fun buildStandardNamedGroup(name: String): String =
 private fun buildNamedGroupWithFlags(name: String, flags: Set<Char>): String =
         when (name) {
             // If the name is `_` we should construct a non-capturing group matching word characters
-            "_" -> if (flags.contains('d')) "(?:\\d+)" else "(?:\\w+)"
+            "_" -> if (flags.contains('d')) "(?:\\d+)" else "(?:[^/]+)"
             // Construct a capturing group
-            else -> if (flags.contains('d')) "(\\d+)" else "(\\w+)"
+            else -> if (flags.contains('d')) "(\\d+)" else "([^/]+)"
         }

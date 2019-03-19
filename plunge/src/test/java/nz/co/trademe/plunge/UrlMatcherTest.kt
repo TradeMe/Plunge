@@ -55,6 +55,15 @@ class UrlMatcherTest {
     }
 
     @Test
+    fun `urlMatcher matches correctly on multiple excluding pattern`() {
+        val matcher = urlMatcher(PathPattern("/{_}/{_}/{_}/{_}/listing/{d|listingId}"), emptyList()) {}
+
+        val input = Uri.parse("https://www.test.com/complete/anything/complete/anything/listing/123234345")
+
+        matcher.performMatch(input)?.params.orEmpty() `should equal` mapOf("listingId" to "123234345")
+    }
+
+    @Test
     fun `urlMatcher doesn't match on digit pattern when word characters present`() {
         val matcher = urlMatcher(PathPattern("/complete/{d|group}"), emptyList()) {}
         val input = Uri.parse("https://www.test.com/complete/12fd34")
