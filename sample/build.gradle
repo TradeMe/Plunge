@@ -6,7 +6,7 @@ buildscript {
         maven { url "https://kotlin.bintray.com/kotlinx" }
     }
     dependencies {
-        classpath "nz.co.trademe.plunge:plunge-gradle-plugin:1.0.0-alpha2"
+        classpath "nz.co.trademe.plunge:plunge-gradle-plugin:1.0.0-alpha3"
     }
 }
 
