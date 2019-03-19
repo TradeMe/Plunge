@@ -119,6 +119,14 @@ class UrlMatcherTest {
         matcher.performMatch(input)?.params.orEmpty() `should contain` ("param" to "1234")
     }
 
+    @Test
+    fun `urlMatcher matches correctly on trailing slashes`() {
+        val matcher = urlMatcher(PathPattern("/complete/{param}"), emptyList()) {}
+        val input = Uri.parse("https://www.test.com/complete/1234/?param=test")
+
+        matcher.performMatch(input)?.params.orEmpty() `should contain` ("param" to "1234")
+    }
+
     // ENDREGION
 
     // REGION UrlMatcher.onMatch
