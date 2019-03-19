@@ -1,4 +1,4 @@
-ext.version = "1.0.0-alpha3"
+ext.version = "1.0.0-alpha4"
 ext.group = "nz.co.trademe.plunge"
 ext.repo = "Plunge"
 ext.org = "trademe"
