@@ -133,7 +133,7 @@ internal fun PathPattern.compileToRegex(): Regex {
         }
     }
 
-    return regexString.toRegex()
+    return regexString.toRegex(RegexOption.IGNORE_CASE)
 }
 
 /**
@@ -148,7 +148,7 @@ private fun buildStandardNamedGroup(name: String): String =
 private fun buildNamedGroupWithFlags(name: String, flags: Set<Char>): String =
         when (name) {
             // If the name is `_` we should construct a non-capturing group matching word characters
-            "_" -> if (flags.contains('d')) "(?:\\d+)" else "(?:\\w+)"
+            "_" -> if (flags.contains('d')) "(?:\\d+)" else "(?:[^/]+)"
             // Construct a capturing group
-            else -> if (flags.contains('d')) "(\\d+)" else "(\\w+)"
+            else -> if (flags.contains('d')) "(\\d+)" else "([^/]+)"
         }
