@@ -74,7 +74,7 @@ class PlungeActivity : AppCompatActivity(), DeepLinkRouter {
     }
   }
 
-  fun launchBuyPage(id: Int) {
+  fun launchBuyPage(id: String) {
     // ...
   }
 }
@@ -147,6 +147,10 @@ class PlungeExampleTests {
 Plunge unit tests can be easily run in the same way you'd run any other unit tests; however, a Gradle plugin is included to execute the verification tests. To run these tests, look for the appropriate `plungeTest` Gradle task for your build variant in the `verification` group. This task will build and install the app on the device or emulator currently connected to your machine, and execute your tests against it. The task will fail if any links are not correctly handled by the app (or links **are** handled by the app when they shouldn't be).
 
 Integrate the task into your CI pipeline for an even better time!
+
+## More info
+
+See [the wiki](https://github.com/TradeMe/Plunge/wiki) for more in-depth information about how to do better deep linking with Plunge.
 
 ## License
 
