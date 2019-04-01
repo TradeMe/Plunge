@@ -131,7 +131,7 @@ class PlungeExampleTests {
   }
 
   val linkHandler = DeepLinkHandler.withSchemeHandlers(
-    PlungeExampleSchemeHandler(this)
+    PlungeExampleSchemeHandler(Mockito.mock(DeepLinkRouter::class.java))
   )
 
   @ParameterizedRobolectricTestRunner.Parameter(0)
