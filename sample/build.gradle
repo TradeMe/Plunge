@@ -16,17 +16,18 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'nz.co.trademe.plunge'
+apply from: '../common.gradle'
 
 plunge {
     testDirectory = file("$projectDir/src/test/test-cases")
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion project.ext.compile_sdk
     defaultConfig {
         applicationId "nz.co.trademe.plunge.sample"
-        minSdkVersion 16
-        targetSdkVersion 28
+        minSdkVersion project.ext.min_sdk
+        targetSdkVersion project.ext.compile_sdk
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -52,6 +53,10 @@ android {
             java.srcDirs = ['src/test/java']
             res.srcDirs = ['src/test/res']
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 

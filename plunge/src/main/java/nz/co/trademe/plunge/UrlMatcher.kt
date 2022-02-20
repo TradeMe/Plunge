@@ -2,6 +2,7 @@ package nz.co.trademe.plunge
 
 import android.net.Uri
 import android.util.Log
+import java.util.*
 
 /**
  * Interface defining a [UrlMatcher]
@@ -87,7 +88,9 @@ internal class Matcher(
         val queryExtractions = uri.queryParameterNames
                 .associateWith { uri.getQueryParameter(it) }
                 .filterNot { entry ->
-                    capturingGroups.any { group -> group.name.toLowerCase() == entry.key?.toLowerCase() }.also { conflictingName ->
+                    capturingGroups.any { group -> group.name.lowercase(Locale.getDefault()) == entry.key.lowercase(
+                        Locale.getDefault()
+                    ) }.also { conflictingName ->
                         if (conflictingName) {
                             Log.w("UrlMatcher", "Query string of name \"${entry.key}\" conflicts with name of group. Dropping in favour of group name.")
                         }
