@@ -3,6 +3,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 apply from: '../common.gradle'
+
+ext {
+    PUBLISH_VERSION = rootVersionName
+    ARTIFACT_ID = "plunge"
+}
+
 apply from: '../publishing.gradle'
 
 android {
