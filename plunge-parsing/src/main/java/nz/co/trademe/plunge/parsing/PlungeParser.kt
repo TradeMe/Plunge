@@ -14,5 +14,5 @@ object PlungeParser {
     fun readTestCases(directory: File): List<PlungeTestCase> =
         directory
             .listFiles { f -> f?.extension == JSON_EXTENSION }
-            ?.map { Json.parse(PlungeTestCase.serializer(), it.readText()) } ?: emptyList()
+            ?.map { Json.decodeFromString(PlungeTestCase.serializer(), it.readText()) } ?: emptyList()
 }
