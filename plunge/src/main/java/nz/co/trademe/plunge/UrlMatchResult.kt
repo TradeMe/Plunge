@@ -7,5 +7,5 @@ import android.net.Uri
  */
 data class UrlMatchResult(
     val url: Uri,
-    val params: Map<String?, String?>
+    val params: Map<String, String>
 )
