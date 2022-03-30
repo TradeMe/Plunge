@@ -58,8 +58,8 @@ internal class Matcher(
         if (!patternRegex.matches(path)) return null
 
         // Check to be sure we have our required query params
-        val queryNames = uri.queryParameterNames.map { it.toLowerCase() }
-        val requiredNames = requiredQueryParams.map { it.toLowerCase() }
+        val queryNames = uri.queryParameterNames.map { it.lowercase() }
+        val requiredNames = requiredQueryParams.map { it.lowercase() }
 
         if (!queryNames.containsAll(requiredNames)) return null
 
@@ -75,19 +75,21 @@ internal class Matcher(
         if (capturingGroups.size > groups.size) return null
 
         // Match up groups to captured groups and hope the ordering is the same
-        @Suppress("UNCHECKED_CAST")
-        val urlPartExtractions = capturingGroups
+        val urlPartExtractions: Map<String, String> = capturingGroups
                 .withIndex()
                 .associateWith { (index, _) -> groups[index] }
-                .map { it.key.value.name to it.value?.value }
+                .filter { it.value != null }
+                .map { it.key.value.name to it.value!!.value }
                 .toMap()
-                .filter { it.value != null } as Map<String, String>
 
         // Extract all query parameters into a map, excluding those which are defined as a group name
-        val queryExtractions = uri.queryParameterNames
+        val queryExtractions: Map<String, String> = uri.queryParameterNames
                 .associateWith { uri.getQueryParameter(it) }
+                .filter { it.value != null }
+                .map { it.key to it.value!! }
+                .toMap()
                 .filterNot { entry ->
-                    capturingGroups.any { group -> group.name.toLowerCase() == entry.key?.toLowerCase() }.also { conflictingName ->
+                    capturingGroups.any { group -> group.name.equals(entry.key, ignoreCase = true) }.also { conflictingName ->
                         if (conflictingName) {
                             Log.w("UrlMatcher", "Query string of name \"${entry.key}\" conflicts with name of group. Dropping in favour of group name.")
                         }

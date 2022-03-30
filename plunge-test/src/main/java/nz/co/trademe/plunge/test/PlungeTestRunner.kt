@@ -18,8 +18,8 @@ object PlungeTestRunner {
         case: PlungeTestCase,
         handler: DeepLinkHandler
     ) {
-        System.out.println("URL: ${case.url}")
-        System.out.println("Handled?: ${case.handled}")
+        println("URL: ${case.url}")
+        println("Handled?: ${case.handled}")
 
         when (case.handled) {
             true -> assertLinkHandled(case, handler)
@@ -38,17 +38,18 @@ object PlungeTestRunner {
         assertNotNull("No scheme handler found", schemeHandler)
 
         val matcher = schemeHandler!!.matchers.first { it.performMatch(uri) != null }
-        System.out.println("Matcher: ${matcher}")
+        println("Matcher: $matcher")
 
         val params = matcher.performMatch(uri)?.params ?: emptyMap()
+        val caseParams = case.params ?: emptyList()
 
         assertEquals(
             "Wrong parameters extracted",
-            case.params.map { it.name to it.value }.toMap(),
+            caseParams.map { it.name to it.value }.toMap(),
             params
         )
 
-        case.params.forEach {
+        caseParams.forEach {
             assertEquals("Parameter '${it.name}' was extracted incorrectly", it.value, params[it.name])
         }
     }

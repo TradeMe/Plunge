@@ -18,15 +18,12 @@ apply plugin: 'kotlin'
 apply plugin: 'kotlinx-serialization'
 
 apply from: '../common.gradle'
-apply from: '../publishing.gradle'
-
-
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
-
 ext {
-    name = "Plunge Parsing"
+    PUBLISH_VERSION = rootVersionName
+    ARTIFACT_ID = "plunge-parsing"
 }
+
+apply from: '../publishing.gradle'
 
 repositories {
     mavenCentral()
@@ -35,7 +32,11 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    api 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.10.0'
+    api "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }

@@ -1,7 +1,5 @@
 package nz.co.trademe.plunge
 
-import android.util.Log
-
 /**
  * Simple data class used for defining a PathPattern. Ideally this would be an inline class, but due
  * to that language feature's experimental status we'll stick with a data class for now.
@@ -27,7 +25,6 @@ internal fun PathPattern.isValid(requiredQueryParameters: List<String>): Boolean
             .filterNot { it.isEmpty() || it.contains("}") }
 
     if (incompleteGroups.isNotEmpty()) {
-        Log.e("PatternValidator", "Incomplete groups found for pattern $pattern: $incompleteGroups")
         return false
     }
 
@@ -40,7 +37,6 @@ internal fun PathPattern.isValid(requiredQueryParameters: List<String>): Boolean
     val filteredGroups = allGroups.filterNot { it == "_" }
 
     if (filteredGroups.toSet().size < filteredGroups.size) {
-        Log.e("PatternValidator", "Duplicate keys found in pattern $pattern: $filteredGroups")
         return false
     }
 
@@ -48,7 +44,6 @@ internal fun PathPattern.isValid(requiredQueryParameters: List<String>): Boolean
             .filter { requiredQueryParameters.contains(it) }
 
     if (duplicateKeys.isNotEmpty()) {
-        Log.e("PatternValidator", "Duplicate keys found for pattern $pattern with required query parameters $requiredQueryParameters: $duplicateKeys")
         return false
     }
 
