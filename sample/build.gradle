@@ -1,13 +1,13 @@
 buildscript {
+    apply from: '../common.gradle'
+
     repositories {
         google()
-        jcenter()
         mavenLocal()
-        maven { url "https://kotlin.bintray.com/kotlinx" }
-        maven { url  "https://dl.bintray.com/trademe/Plunge" }
+        mavenCentral()
     }
     dependencies {
-        classpath "nz.co.trademe.plunge:plunge-gradle-plugin:1.0.0"
+        classpath "nz.co.trademe.plunge:plunge-gradle-plugin:$project.ext.version"
     }
 }
 

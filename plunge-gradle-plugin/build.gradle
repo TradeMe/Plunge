@@ -10,7 +10,6 @@ apply from: '../publishing.gradle'
 
 repositories {
     google()
-    jcenter()
     mavenLocal()
     maven { url "https://kotlin.bintray.com/kotlinx" }
     maven { url  "https://dl.bintray.com/trademe/Plunge" }
@@ -24,5 +23,5 @@ dependencies {
     implementation "com.android.tools.build:gradle:$android_gradle_plugin_version"
 
     // Plunge parsing
-    implementation "nz.co.trademe.plunge:plunge-parsing:1.0.0"
+    implementation "nz.co.trademe.plunge:plunge-parsing:$project.ext.version"
 }
