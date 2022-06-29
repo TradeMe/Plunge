@@ -23,5 +23,5 @@ dependencies {
     implementation "com.android.tools.build:gradle:$android_gradle_plugin_version"
 
     // Plunge parsing
-    implementation "nz.co.trademe.plunge:plunge-parsing:$project.ext.version"
+    implementation project(':plunge-parsing')
 }

@@ -5,9 +5,10 @@ buildscript {
         google()
         mavenLocal()
         mavenCentral()
+        jcenter()
     }
     dependencies {
-        classpath "nz.co.trademe.plunge:plunge-gradle-plugin:$project.ext.version"
+        classpath "nz.co.trademe.plunge:plunge-gradle-plugin:1.0.1"
     }
 }
 
