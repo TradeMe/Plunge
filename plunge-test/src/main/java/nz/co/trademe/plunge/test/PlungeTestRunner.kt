@@ -24,6 +24,9 @@ object PlungeTestRunner {
         when (case.handled) {
             true -> assertLinkHandled(case, handler)
             false -> assertLinkNotHandled(case, handler)
+            else -> {
+
+            }
         }
     }
 

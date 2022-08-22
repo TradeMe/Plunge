@@ -19,7 +19,7 @@ dependencies {
     // External dependencies
     compileOnly gradleApi()
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
     implementation "com.android.tools.build:gradle:$android_gradle_plugin_version"
 
     // Plunge parsing
